@@ -3,8 +3,8 @@
 import logging
 import os
 
-from sqlalchemy import create_engine
 from sqlalchemy.orm import Load, sessionmaker
+from sqlalchemy import create_engine
 
 from .models.apt import Airport, Runway, RunwayEnd
 from .models.nav import Navaid
@@ -13,6 +13,14 @@ logger = logging.getLogger(__name__)
 
 
 def get_db_url():
+    """
+    Get the database URL from environment variables.
+
+    Returns
+    -------
+    str
+        The database URL.
+    """
     db_rdbm = os.getenv("DB_RDBM")
     db_user = os.getenv("DB_USER")
     db_pass = os.getenv("DB_PASS")
@@ -32,7 +40,28 @@ Engine = create_engine(get_db_url(), echo=False)
 
 
 def find_airport(identifier, include=None):
-    _include = include or []
+    """
+    Find an airport by its identifier (FAA or ICAO).
+
+    Parameters
+    ----------
+    identifier : str
+        The identifier of the airport (FAA or ICAO).
+    include : list, optional
+        A list of related objects to include in the query. The default is None.
+        Possible values are:
+        - "runways": Include runways associated with the airport.
+        - "remarks": Include remarks associated with the airport.
+        - "attendance": Include attendance schedules associated with the airport.
+        ***(work to add more options here)
+
+    Returns
+    -------
+    Airport
+        The airport object if found, otherwise None.
+    """
+
+    _include = include or [] # Default to an empty list if include is None
     queryoptions = []
 
     if "runways" in _include:
@@ -64,6 +93,26 @@ def find_airport(identifier, include=None):
 
 
 def find_runway(name, airport, include=None):
+    """
+    Find a runway by its name and associated airport.
+
+    Parameters
+    ----------
+    name : str
+        The name of the runway.
+    airport : str or Airport
+        The airport object or its identifier (FAA or ICAO).
+    include : list, optional
+        A list of related objects to include in the query. The default is None.
+        Possible values are:
+        - "runway_ends": Include runway ends associated with the runway.
+        ***(work to add more options here)
+
+    Returns
+    -------
+    Runway
+        The runway object if found, otherwise None.
+    """
     _include = include or []
     queryoptions = []
 
@@ -94,6 +143,27 @@ def find_runway(name, airport, include=None):
 
 
 def find_runway_end(name, runway, include=None):
+    """
+    Find a runway end by its name and associated runway.
+
+    Parameters
+    ----------
+    name : str
+        The name of the runway end.
+    runway : str or Runway
+        The runway object or its identifier (FAA or ICAO).
+    include : list, optional   
+        A list of related objects to include in the query. The default is None.
+        Possible values are:
+        - "geographic": Include geographic information associated with the runway end.
+        - "lighting": Include lighting information associated with the runway end.
+        ***(work to add more options here)
+        
+    Returns
+    -------
+    RunwayEnd
+        The runway end object if found, otherwise None.
+    """
     _include = include or []
 
     if isinstance(runway, Runway):
@@ -128,6 +198,26 @@ def find_runway_end(name, runway, include=None):
 
 
 def find_navaid(identifier, type, include=None):
+    """
+    Find a navaid by its identifier and type.
+
+    Parameters
+    ----------
+    identifier : str
+        The identifier of the navaid.
+    type : str
+        The type of the navaid (e.g., VOR, NDB).
+    include : list, optional
+        A list of related objects to include in the query. The default is None.
+        Possible values are:
+        - "demographic": Include demographic information associated with the navaid.
+        ***(work to add more options here)
+
+    Returns
+    -------
+    Navaid
+        The navaid object if found, otherwise None.
+    """
     _include = include or []
 
     Session = sessionmaker(bind=Engine)

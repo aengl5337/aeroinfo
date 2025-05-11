@@ -22,6 +22,24 @@ http.mount("http://", adapter)
 
 
 def get_download_url(edition="current"):
+    """
+    Get the download URL for the NASR zip file.
+    The URL is obtained by making a GET request to the NASR API with the specified edition.
+    The edition can be "current" or "next". The default is "current". ***(verify this)
+    The edition date is also extracted from the response.
+    
+    Parameters
+    ----------
+    edition : str, optional
+        The edition of the NASR data to download. The default is "current".
+        Other options are "next" or "previous". ***(verify this)
+    
+    Returns
+    -------
+    str
+        The download URL for the NASR zip file.
+    """
+
     global edition_date
     params = {"edition": edition}
     headers = {"Accept": "application/json"}
@@ -36,6 +54,22 @@ def get_download_url(edition="current"):
 
 
 def download_nasr_zip(zip_url, path=None):
+    """
+    Download the NASR zip file from the specified URL.
+    The zip file is saved to a temporary directory or to the specified path.
+
+    Parameters
+    ----------
+    zip_url : str
+        The URL of the NASR zip file to download.
+    path : str, optional
+        The path to save the downloaded zip file. If not specified, a temporary directory is used.
+
+    Returns
+    -------
+    str
+        The full path to the downloaded zip file.
+    """
     if not path:
         base_download_dir = tempfile.mkdtemp()
     else:
@@ -58,6 +92,19 @@ def download_nasr_zip(zip_url, path=None):
 
 
 def extract_nasr_zip(zip_path):
+    """
+    Extract the NASR zip file to the specified directory.
+    
+    Parameters
+    ----------
+    zip_path : str
+        The path to the NASR zip file to extract.
+
+    Returns
+    -------
+    str
+        The directory where the zip file was extracted.
+    """
     extract_dir = os.path.dirname(zip_path)
     logging.info("Extracting {} to {}".format(zip_path, extract_dir))
     with zipfile.ZipFile(zip_path, "r") as f:
@@ -68,6 +115,23 @@ def extract_nasr_zip(zip_path):
 
 
 def download_and_extract_nasr_zip(edition="current", path=None):
+    """
+    Download and extract the NASR zip file.
+    The zip file is downloaded from the NASR API and extracted to a temporary directory or to the specified path.
+
+    Parameters
+    ----------
+    edition : str, optional
+        The edition of the NASR data to download. The default is "current".
+        Other options are "next" or "previous". ***(verify this)
+    path : str, optional
+        The path to save the downloaded zip file and extracted data. If not specified, a temporary directory is used.
+
+    Returns
+    -------
+    str
+        The directory where the zip file was extracted.
+    """
     if not path:
         return extract_nasr_zip(download_nasr_zip(get_download_url(edition=edition)))
     else:
