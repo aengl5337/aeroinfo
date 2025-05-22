@@ -1,11 +1,31 @@
 #!/usr/bin/env python3
 
 import pprint
+import logging
+
+# Set up logging
+log_level = "warning"  # Default log level
+log_level_map = {
+    "debug": logging.DEBUG,
+    "info": logging.INFO,
+    "warning": logging.WARNING,
+    "error": logging.ERROR,
+    "critical": logging.CRITICAL,
+}
+
+# logging.basicConfig(level=log_level_map[log_level])
+logging.basicConfig(
+    level=log_level_map[log_level],
+    filename="app.log",  # Specify the log file name
+    filemode="a",        # Append to the file (use "w" to overwrite)
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
 from database import find_airport, find_navaid, find_runway, find_runway_end
-from sqlalchemy import create_engine
+# from sqlalchemy import create_engine # ***this is not used here, and is now imported in the database module
 
 pp = pprint.PrettyPrinter()
+
 
 include = ["demographic"]
 

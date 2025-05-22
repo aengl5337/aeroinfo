@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 
+from dotenv import load_dotenv
+load_dotenv()
+
 import logging
 import os
 
@@ -33,6 +36,7 @@ def get_db_url():
         url = "%s://%s:%s@%s/%s" % (db_rdbm, db_user, db_pass, db_host, db_name)
 
     logger.debug(f"Database URL: {url}")
+    # print(f"Database URL: {url}")
     return url
 
 

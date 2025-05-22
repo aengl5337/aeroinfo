@@ -36,6 +36,12 @@ log_level_map = {
 
 # Set up logging
 logging.basicConfig(level=log_level_map[args.log_level])
+
+
+# Blanket download and extraction of NASR data
+# ***work on timing this operation
 print(download_and_extract_nasr_zip(edition=args.edition, path=os.path.join("tmp","faa_nasr_data")))
+
+# Query the database for 
 
 

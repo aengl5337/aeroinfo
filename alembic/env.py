@@ -5,8 +5,8 @@ from sqlalchemy import create_engine
 
 from alembic import context
 
-sys.path.append("../database")
-from database import get_db_url  # noqa: E402
+sys.path.append("./src/aeroinfo") # Previously set to ../database
+from database import get_db_url  # noqa: E4$env:02
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
