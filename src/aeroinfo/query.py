@@ -28,12 +28,20 @@ pp = pprint.PrettyPrinter()
 
 
 # include = ["demographic"]
-# include = None # Same as "demographic"
-include = ["runways", "remarks", "attendance"]
+# include = None # Same as "demographic"?
+include = ["all"]
 
 print("#  NMM ###############################")
 airport = find_airport("NMM", include=include)
 pp.pprint(airport.to_dict(include=include))
+
+print("# NMM runway 19L/01R ##################")
+runway = find_runway("19L", airport, include=include)
+pp.pprint(runway.to_dict(include=include))
+
+print("# NMM runway end 19L #####################")
+rwend = find_runway_end("19L", runway, include=include)
+pp.pprint(rwend.to_dict(include=include))
 
 # print("#  DPA ###############################")
 # airport = find_airport("DPA", include=include)
