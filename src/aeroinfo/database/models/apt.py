@@ -571,13 +571,13 @@ class Airport(Base):
             else:
                 result[attr] = value
 
-        if "runways" in _include:
+        if "runways" in _include or "all" in _include:
             result["runways"] = [runway.to_dict() for runway in self.runways]
 
-        if "remarks" in _include:
+        if "remarks" in _include or "all" in _include:
             result["remarks"] = [remark.remark for remark in self.remarks]
 
-        if "attendance" in _include:
+        if "attendance" in _include or "all" in _include:
             result["attendance"] = [
                 attsched.attendance_schedule for attsched in self.attendance_schedules
             ]

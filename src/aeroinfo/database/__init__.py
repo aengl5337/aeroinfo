@@ -54,10 +54,36 @@ def find_airport(identifier, include=None):
     include : list, optional
         A list of related objects to include in the query. The default is None.
         Possible values are:
+        - "demographic": Include demographic information associated with the airport. (note: nothing is actually queried here, but the model has a demographic field that it defaults)
+        - "ownership": Include ownership information associated with the airport.
+        - "geographic": Include geographic information associated with the airport.
+        - "faaservices": Include FAA services associated with the airport.
+        - "fedstatus": Include federal status information associated with the airport.
+        - "inspection": Include inspection information associated with the airport.
+        - "aptservices": Include airport services associated with the airport.
+        - "facilities": Include facilities associated with the airport.
+        - "basedaircraft": Include based aircraft information associated with the airport.
+        - "annualops": Include annual operations information associated with the airport.
+        - "additional": Include additional information associated with the airport.
         - "runways": Include runways associated with the airport.
         - "remarks": Include remarks associated with the airport.
         - "attendance": Include attendance schedules associated with the airport.
-        ***(work to add more options here)
+        - "all": Include all related objects.
+
+         if "demographic" in _include or "all" in _include:
+            base_attrs += demo_attrs
+        if "runways" in _include:
+            result["runways"] = [runway.to_dict() for runway in self.runways]
+
+        if "remarks" in _include:
+            result["remarks"] = [remark.remark for remark in self.remarks]
+
+        if "attendance" in _include:
+            result["attendance"] = [
+                attsched.attendance_schedule for attsched in self.attendance_schedules
+            ]
+        
+
 
     Returns
     -------
