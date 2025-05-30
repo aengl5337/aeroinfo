@@ -168,6 +168,164 @@ class Navaid(Base):
 
     def __repr__(self):
         return f"<Navaid(name={self.name}, id={self.facility_id}, type={self.facility_type})>"
+    
+    def to_dict(self, include=None):
+        _include = include or []
+
+        base_attrs = [
+            "facility_id",
+            "facility_type",
+            "official_facility_id",
+            "effective_date",
+            "name",
+            "city",
+            "state_name",
+            "state_code",
+            "region",
+            "country",
+            "country_code",
+            "owners_name",
+            "operators_name",
+            "common_system_usage",
+            "public_use",
+            "navaid_class",
+            "hours_of_operation",
+            "high_altitude_artcc_id",
+            "high_altitude_artcc_name",
+            "low_altitude_artcc_id",
+            "low_altitude_artcc_name",
+        ]
+
+        ownership_attrs = [
+            
+        ]
+
+        geo_attrs = [
+            
+        ]
+
+        faasrv_attrs = [
+            
+        ]
+
+        fedstatus_attrs = [
+            
+        ]
+
+        inspect_attrs = [
+            
+        ]
+
+        aptsrv_attrs = [
+            
+        ]
+
+        facilities_attrs = [
+            
+        ]
+
+        basedacft_attrs = [
+            
+        ]
+
+        annops_attrs = [
+            
+        ]
+
+        addl_attrs = [
+            
+        ]
+        # ***Fill the attributes above with the appropriate attributes from the Navaid model.
+
+        # if "demographic" in _include or "all" in _include:
+        #     base_attrs += demo_attrs
+
+        # if "ownership" in _include or "all" in _include:
+        #     base_attrs += ownership_attrs
+
+        # if "geographic" in _include or "all" in _include:
+        #     base_attrs += geo_attrs
+
+        # if "faaservices" in _include or "all" in _include:
+        #     base_attrs += faasrv_attrs
+
+        # if "fedstatus" in _include or "all" in _include:
+        #     base_attrs += fedstatus_attrs
+
+        # if "inspection" in _include or "all" in _include:
+        #     base_attrs += inspect_attrs
+
+        # if "aptservices" in _include or "all" in _include:
+        #     base_attrs += aptsrv_attrs
+
+        # if "facilities" in _include or "all" in _include:
+        #     base_attrs += facilities_attrs
+
+        # if "basedaircraft" in _include or "all" in _include:
+        #     base_attrs += basedacft_attrs
+
+        # if "annualops" in _include or "all" in _include:
+        #     base_attrs += annops_attrs
+
+        # if "additional" in _include or "all" in _include:
+        #     base_attrs += addl_attrs
+
+        result = dict()
+
+        for attr in base_attrs:
+            value = getattr(self, attr)
+
+            if isinstance(value, enum.Enum):
+                result[attr] = value.value
+            elif isinstance(value, (datetime.date, datetime.datetime)):
+                result[attr] = value.isoformat()
+            else:
+                result[attr] = value
+
+        if "remarks" in _include or "all" in _include:
+            result["remarks"] = [remark.remark for remark in self.remarks]
+
+        # if "airspace_fixes" in _include or "all" in _include:
+        #     result["airspace_fixes"] = [
+        #         {
+        #             "fix": airspace_fix.fix,
+        #             "more_fixes": airspace_fix.more_fixes,
+        #         }
+        #         for airspace_fix in self.airspace_fixes
+        #     ]
+        # if "holding_patterns" in _include or "all" in _include:
+        #     result["holding_patterns"] = [
+        #         {
+        #             "holding_pattern": holding_pattern.holding_pattern,
+        #             "holding_pattern_pattern": holding_pattern.holding_pattern_pattern,
+        #             "more_holding_patterns": holding_pattern.more_holding_patterns,
+        #         }
+        #         for holding_pattern in self.holding_patterns
+        #     ]
+        # if "fan_markers" in _include or "all" in _include:
+        #     result["fan_markers"] = [
+        #         {
+        #             "fan_marker": fan_marker.fan_marker,
+        #             "more_fan_markers": fan_marker.more_fan_markers,
+        #         }
+        #         for fan_marker in self.fan_markers
+        #     ]
+        # if "vor_receiver_checkpoints" in _include or "all" in _include:
+        #     result["vor_receiver_checkpoints"] = [
+        #         {
+        #             "air_ground": vor_receiver_checkpoint.air_ground.value,
+        #             "bearing": vor_receiver_checkpoint.bearing,
+        #             "altitude": vor_receiver_checkpoint.altitude,
+        #             "airport_id": vor_receiver_checkpoint.airport_id,
+        #             "state": vor_receiver_checkpoint.state,
+        #             "air_narrative": vor_receiver_checkpoint.air_narrative,
+        #             "ground_narrative": vor_receiver_checkpoint.ground_narrative,
+        #         }
+        #         for vor_receiver_checkpoint in self.vor_receiver_checkpoints
+        #     ]
+        # *** Verify the above relationships and attributes are correct and uncomment them if needed.
+
+        return result
 
 
 class Remark(Base):

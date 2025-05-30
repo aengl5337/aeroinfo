@@ -223,7 +223,19 @@ def find_navaid(identifier, type, include=None):
     identifier : str
         The identifier of the navaid.
     type : str
-        The type of the navaid (e.g., VOR, NDB).
+        The type of the navaid.  Accepted values are:
+        - "VOR"
+        - "NDB"
+        - "DME"
+        - "TACAN"
+        - "VOR/DME"
+        - "NDB/DME"
+        - "VORTAC"
+        - "FAN MARKER"
+        - "VOT" ...***Not sure what this is, but it is in the database
+        ***May be additional types not listed here, but these are the most common.
+
+
     include : list, optional
         A list of related objects to include in the query. The default is None.
         Possible values are:
