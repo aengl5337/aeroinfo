@@ -217,6 +217,11 @@ def find_runway_end(name, runway, include=None):
 def find_navaid(identifier, type, include=None):
     """
     Find a navaid by its identifier and type.
+    # ****************NOTE:  Current unique key for this file is: 3 letter id + type + city
+    ## NOTE: NOTE: Despite the above note, every other record type only seems to link back to NAV1 via facility ID and facility type.
+    ##             And postgres doesn't seem to like navaids having 3 primary key columns but other tables only using 2 for foreign keys
+    ##             (though, sqlite3 doesn't seem to care).  As such, we'll only be using facility_id and facility_type as primary keys.
+
 
     Parameters
     ----------
@@ -248,6 +253,23 @@ def find_navaid(identifier, type, include=None):
         The navaid object if found, otherwise None.
     """
     _include = include or []
+    queryoptions = []
+
+    if "remarks" in _include or "all" in _include:
+        queryoptions.append(Load(Navaid).joinedload("remarks"))
+
+    if "airspace_fixes" in _include or "all" in _include:
+        queryoptions.append(Load(Navaid).joinedload("airspace_fixes"))
+
+    if "holding_patterns" in _include or "all" in _include:
+        queryoptions.append(Load(Navaid).joinedload("holding_patterns"))
+
+    if "fan_markers" in _include or "all" in _include:
+        queryoptions.append(Load(Navaid).joinedload("fan_markers"))
+
+    if "vor_receiver_checkpoints" in _include or "all" in _include:
+        queryoptions.append(Load(Navaid).joinedload("vor_receiver_checkpoints"))
+        
 
     Session = sessionmaker(bind=Engine)
     session = Session()
@@ -259,6 +281,7 @@ def find_navaid(identifier, type, include=None):
             & (Navaid.facility_type == type.upper())
         )
         .order_by(Navaid.effective_date.desc())
+        .options(queryoptions)
         .first()
     )
 

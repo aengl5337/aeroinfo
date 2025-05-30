@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 
+import datetime
+import enum
 import logging
 
-from sqlalchemy import Column, Date, Enum, Float, Integer, String
+from sqlalchemy import Boolean, Column, Date, Enum, Float, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import ForeignKeyConstraint
 
@@ -176,6 +178,8 @@ class Navaid(Base):
             "facility_id",
             "facility_type",
             "official_facility_id",
+            "tacan_channel",
+            "frequency",
             "effective_date",
             "name",
             "city",
@@ -196,79 +200,62 @@ class Navaid(Base):
             "low_altitude_artcc_name",
         ]
 
-        ownership_attrs = [
-            
-        ]
-
         geo_attrs = [
-            
+            "latitude_dms",
+            "latitude_secs",
+            "longitude_dms",
+            "longitude_secs",
+            "coords_survey_accuracy",
+            "tacan_only_latitude_dms",
+            "tacan_only_latitude_secs",
+            "tacan_only_longitude_dms",
+            "tacan_only_longitude_secs",
+            "elevation",
+            "mag_variation",
+            "mag_variation_year",
+            "quadrant_id_and_range_leg_bearing",
         ]
 
-        faasrv_attrs = [
+        facility_attrs = [
+            "simultaneous_voice",
+            "power_output_watts",
+            "automatic_voice_id",
+            "monitoring_category",
+            "radio_voice_call_name",
+            "transmitted_id",
+            "fan_marker_type",
+            "fan_marker_true_bearing",
+            "vor_service_volume",
+            "dme_service_volume",
+            "low_altitude_facility_used_in_high_structure",
+            "z_marker_available",
+            "tweb_hours",
+            "tweb_phone_number",
+            "fss_id",
+            "fss_name",
+            "fss_hours_of_operation",
+            "notam_accountability_code",
+            "navaid_status",
+        ]
+        
             
+        addl_attrs = [ 
+            "pitch",
+            "catch",
+            "sua_atcaa",
+            "navaid_restriction",
+            "hiwas",
+            "tweb",            
         ]
 
-        fedstatus_attrs = [
-            
-        ]
+        if "geographic" in _include or "all" in _include:
+            base_attrs += geo_attrs
 
-        inspect_attrs = [
-            
-        ]
+        if "facility" in _include or "all" in _include:
+            base_attrs += facility_attrs
 
-        aptsrv_attrs = [
-            
-        ]
-
-        facilities_attrs = [
-            
-        ]
-
-        basedacft_attrs = [
-            
-        ]
-
-        annops_attrs = [
-            
-        ]
-
-        addl_attrs = [
-            
-        ]
-        # ***Fill the attributes above with the appropriate attributes from the Navaid model.
-
-        # if "demographic" in _include or "all" in _include:
-        #     base_attrs += demo_attrs
-
-        # if "ownership" in _include or "all" in _include:
-        #     base_attrs += ownership_attrs
-
-        # if "geographic" in _include or "all" in _include:
-        #     base_attrs += geo_attrs
-
-        # if "faaservices" in _include or "all" in _include:
-        #     base_attrs += faasrv_attrs
-
-        # if "fedstatus" in _include or "all" in _include:
-        #     base_attrs += fedstatus_attrs
-
-        # if "inspection" in _include or "all" in _include:
-        #     base_attrs += inspect_attrs
-
-        # if "aptservices" in _include or "all" in _include:
-        #     base_attrs += aptsrv_attrs
-
-        # if "facilities" in _include or "all" in _include:
-        #     base_attrs += facilities_attrs
-
-        # if "basedaircraft" in _include or "all" in _include:
-        #     base_attrs += basedacft_attrs
-
-        # if "annualops" in _include or "all" in _include:
-        #     base_attrs += annops_attrs
-
-        # if "additional" in _include or "all" in _include:
-        #     base_attrs += addl_attrs
+        if "additional" in _include or "all" in _include:
+            base_attrs += addl_attrs
 
         result = dict()
 
@@ -282,8 +269,9 @@ class Navaid(Base):
             else:
                 result[attr] = value
 
-        if "remarks" in _include or "all" in _include:
-            result["remarks"] = [remark.remark for remark in self.remarks]
+
+        # if "remarks" in _include or "all" in _include:
+        #     result["remarks"] = [remark.remark for remark in self.remarks]
 
         # if "airspace_fixes" in _include or "all" in _include:
         #     result["airspace_fixes"] = [
@@ -293,6 +281,7 @@ class Navaid(Base):
         #         }
         #         for airspace_fix in self.airspace_fixes
         #     ]
+        
         # if "holding_patterns" in _include or "all" in _include:
         #     result["holding_patterns"] = [
         #         {
@@ -302,6 +291,7 @@ class Navaid(Base):
         #         }
         #         for holding_pattern in self.holding_patterns
         #     ]
+        
         # if "fan_markers" in _include or "all" in _include:
         #     result["fan_markers"] = [
         #         {
@@ -310,6 +300,7 @@ class Navaid(Base):
         #         }
         #         for fan_marker in self.fan_markers
         #     ]
+        
         # if "vor_receiver_checkpoints" in _include or "all" in _include:
         #     result["vor_receiver_checkpoints"] = [
         #         {
@@ -323,7 +314,6 @@ class Navaid(Base):
         #         }
         #         for vor_receiver_checkpoint in self.vor_receiver_checkpoints
         #     ]
-        # *** Verify the above relationships and attributes are correct and uncomment them if needed.
 
         return result
 

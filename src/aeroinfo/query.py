@@ -398,7 +398,7 @@ include = ["all"]
 # """
 print("#  MEI VORTAC ###########################")
 navaid = find_navaid("MEI", "VORTAC")
-pp.pprint(navaid)
+pp.pprint(navaid.to_dict(include=include))
 
 
 # print("#  DPA ###############################")
