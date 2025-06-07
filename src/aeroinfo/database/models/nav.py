@@ -171,7 +171,7 @@ class Navaid(Base):
     def __repr__(self):
         return f"<Navaid(name={self.name}, id={self.facility_id}, type={self.facility_type})>"
     
-    def to_dict(self, include=None):
+    def to_dict(self, include=None):    
         _include = include or []
 
         base_attrs = [
